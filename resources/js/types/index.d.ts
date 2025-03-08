@@ -2,6 +2,30 @@ import type { PageProps } from '@inertiajs/core';
 import type { LucideIcon } from 'lucide-vue-next';
 import type { Config } from 'ziggy-js';
 
+export interface Character {
+    id: number;
+    name: string;
+    status: string;
+    species: string;
+    type: string,
+    image: string;
+    created: string;
+    url: string;
+    location: CharacterLocation;
+    origin: CharacterOrigin;
+    episode: Array
+}
+
+export interface CharacterLocation {
+    name: string;
+    location: string;
+}
+
+export interface CharacterOrigin {
+    name: string;
+    location: string;
+}
+
 export interface Auth {
     user: User;
 }
