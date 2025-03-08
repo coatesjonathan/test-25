@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Head } from '@inertiajs/vue3';
+import { Head, Link } from '@inertiajs/vue3';
 import { type Character } from '@/types';
 
 const props = defineProps<{
@@ -12,8 +12,8 @@ const props = defineProps<{
         <title>{{ character.name }}</title>
     </Head>
 
-    <div class="grid grid-cols-12">
-        <figure class="col-span-4 relative">
+    <div class="grid sm:grid-cols-12">
+        <figure class="sm:col-span-4 relative">
             <img 
                 class="w-full"
                 :src="character.image" 
@@ -21,7 +21,8 @@ const props = defineProps<{
                 loading="lazy"
             />
         </figure>
-        <article class="col-span-8 flex flex-col gap-4 p-4">
+        <article class="sm:col-span-8 flex flex-col gap-4 p-4">
+            <Link :href="route('home')" class="text-sm hover:underline">&laquo; Back</Link>
             <h1 class="text-3xl lg:text-5xl font-bold truncate">{{ character.name }}</h1>
             <div class="space-y-1">
                 <p v-if="character.species">{{ `Species: ${character.species}` }}</p>
