@@ -59,4 +59,12 @@ export interface User {
     updated_at: string;
 }
 
+export interface Pagination {
+    current: number,
+    count: number;
+    pages: number;
+    next: number;
+    prev: number;
+}
+
 export type BreadcrumbItemType = BreadcrumbItem;

@@ -13,10 +13,14 @@ class RickAndMortyService
      * @param int $page
      * @return array
      */
-    public static function index($page = 1)
+    public static function index($page = 1, array $filters = [])
     {
-        return Cache::remember("characters_page_{$page}", 60, function () use ($page) {
-            $response = Http::get(config('services.rickandmorty.base_url') . "/character", ['page' => $page]);
+        $cacheKey = "characters_page_{$page}_" . md5(json_encode($filters));
+
+        return Cache::remember($cacheKey, 60, function () use ($page, $filters) {
+            $response = Http::get(config('services.rickandmorty.base_url') . "/character", array_merge([
+                'page' => $page
+            ], $filters));
 
             return $response->json();
         });
