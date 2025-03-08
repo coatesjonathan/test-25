@@ -2,7 +2,7 @@
 import { Head, Link } from '@inertiajs/vue3';
 import { type Character } from '@/types';
 
-const props = defineProps<{
+defineProps<{
     character: Character
 }>();
 </script>
