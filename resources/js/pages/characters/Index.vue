@@ -2,7 +2,7 @@
 import { Head, router, Link } from '@inertiajs/vue3';
 import Character from '@/partials/Character.vue';
 import { type Pagination } from '@/types';
-import { reactive } from 'vue';
+import { computed, reactive } from 'vue';
 
 const props = defineProps<{
     characters: Record<string, any>,
@@ -20,8 +20,25 @@ const filters = reactive({
     ...props.filters
 })
 
-function searchCharacters() {
-    router.get(route('home'), filters);
+const filteredFilters = computed(() => {
+    return Object.fromEntries(
+        Object.entries(filters).filter(([key, value]) => value !== '')
+    );
+});
+
+function filterCharacters() {
+    router.get(route('home'), filteredFilters.value);
+}
+
+function resetFilters() {
+    filters.page = 1;
+    filters.name = '';
+    filters.status = '';
+    filters.species = '';
+    filters.type = '';
+    filters.gender = '';
+
+    filterCharacters();
 }
 </script>
 
@@ -31,7 +48,7 @@ function searchCharacters() {
     </Head>
     
     <form 
-        @submit.prevent="searchCharacters"
+        @submit.prevent="filterCharacters"
         method="GET" 
         :action="route('home')" 
         class="p-6 grid sm:grid-cols-2 md:grid-cols-4 gap-4">
@@ -97,7 +114,14 @@ function searchCharacters() {
             <option value="genderless">Genderless</option>
             <option value="unknown">Unknown</option>
         </select>
-        <button type="submit" class="p-2 bg-blue-500 text-white rounded">Search</button>
+        <button 
+            type="submit" 
+            class="p-2 bg-blue-500 text-white rounded">Search</button>
+        <button 
+            v-if="Object.keys(filteredFilters).length > 1"
+            type="button" 
+            @click="resetFilters" 
+            class="p-2 bg-gray-300 text-gray-800 rounded">Reset</button>
     </form>
     
     <div 
@@ -123,7 +147,7 @@ function searchCharacters() {
             <Link 
                 v-if="pagination.prev"
                 :href="route('home', {
-                    ...filters,
+                    ...filteredFilters,
                     page: pagination.prev
                 })"
                 preserve-scroll
@@ -131,7 +155,7 @@ function searchCharacters() {
             <Link
                 v-if="pagination.next"
                 :href="route('home', {
-                    ...filters,
+                    ...filteredFilters,
                     page: pagination.next
                 })"
                 preserve-scroll
